@@ -1,4 +1,5 @@
-# mosaic
+# `mosaic`: a Python script to generate photographic mosaic images
+> TODO: update this description!
 
 This utility can be used to generate [photo-mosaic](http://en.wikipedia.org/wiki/Photographic_mosaic) images, to use it you must have Python installed, along with the [Pillow](http://pillow.readthedocs.org/en/latest/) imaging library.
 
