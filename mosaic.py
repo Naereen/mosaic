@@ -119,17 +119,23 @@ class TileFitter:
 
     def __get_tile_diff(self, t1, t2, bail_out_value):
         diff = 0
-        GRAY = isinstance(t1[0], int) or not hasattr(t1[0], 'len')
-        for i in range(len(t1)):
-            if GRAY:
+        # RGB image if t1[0] = (r,g,b) is a tuple,
+        # otherwise t1[0] = gray is a single integer.
+        GRAY = not isinstance(t1[0], tuple)
+        if GRAY:
+            for i in range(len(t1)):
                 # diff += abs(t1[i] - t2[i])
                 diff += (t1[i] - t2[i])**2
-            else:
+                if diff > bail_out_value:
+                    # we know already that this isn"t going to be the best fit, so no point continuing with this tile
+                    return diff
+        else:
+            for i in range(len(t1)):
                 # diff += (abs(t1[i][0] - t2[i][0]) + abs(t1[i][1] - t2[i][1]) + abs(t1[i][2] - t2[i][2]))
                 diff += (t1[i][0] - t2[i][0])**2 + (t1[i][1] - t2[i][1])**2 + (t1[i][2] - t2[i][2])**2
-            if diff > bail_out_value:
-                # we know already that this isn"t going to be the best fit, so no point continuing with this tile
-                return diff
+                if diff > bail_out_value:
+                    # we know already that this isn"t going to be the best fit, so no point continuing with this tile
+                    return diff
         return diff
 
     def get_best_fit_tile(self, img_data):
@@ -173,8 +179,7 @@ class ProgressCounter:
 
     def update(self):
         self.counter += 1
-        sys.stdout.write("Progress: %.4g%% %s" %
-                         (100 * self.counter / self.total, "\r"))
+        sys.stdout.write("Progress: {:.2%}{}".format(self.counter / self.total, "\r"))
     sys.stdout.flush()
 
 
