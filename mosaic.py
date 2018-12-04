@@ -13,10 +13,15 @@ from multiprocessing import Process, Queue, cpu_count
 from PIL import Image
 
 # Change these 3 config parameters to suit your needs...
-TILE_SIZE = 50		# height/width of mosaic tiles in pixels
+
+# height/width of mosaic tiles in pixels
+TILE_SIZE = 50
+
 # tile matching resolution (higher values give better fit but require more processing)
 TILE_MATCH_RES = 5
-ENLARGEMENT = 5		# the mosaic image will be this many times wider and taller than the original
+
+# the mosaic image will be this many times wider and taller than the original
+ENLARGEMENT = 10
 
 TILE_BLOCK_SIZE = TILE_SIZE // max(min(TILE_MATCH_RES, TILE_SIZE), 1)
 WORKER_COUNT = max(cpu_count() - 1, 1)
@@ -114,11 +119,14 @@ class TileFitter:
 
     def __get_tile_diff(self, t1, t2, bail_out_value):
         diff = 0
+        GRAY = isinstance(t1[0], int) or not hasattr(t1[0], 'len')
         for i in range(len(t1)):
-            #diff += (abs(t1[i][0] - t2[i][0]) + abs(t1[i][1] - t2[i][1]) + abs(t1[i][2] - t2[i][2]))
-            diff += ((t1[i][0] - t2[i][0])**2
-                + (t1[i][1] - t2[i][1])**2
-                + (t1[i][2] - t2[i][2])**2)
+            if GRAY:
+                # diff += abs(t1[i] - t2[i])
+                diff += (t1[i] - t2[i])**2
+            else:
+                # diff += (abs(t1[i][0] - t2[i][0]) + abs(t1[i][1] - t2[i][1]) + abs(t1[i][2] - t2[i][2]))
+                diff += (t1[i][0] - t2[i][0])**2 + (t1[i][1] - t2[i][1])**2 + (t1[i][2] - t2[i][2])**2
             if diff > bail_out_value:
                 # we know already that this isn"t going to be the best fit, so no point continuing with this tile
                 return diff
@@ -165,7 +173,7 @@ class ProgressCounter:
 
     def update(self):
         self.counter += 1
-        sys.stdout.write("Progress: %s%% %s" %
+        sys.stdout.write("Progress: %.4g%% %s" %
                          (100 * self.counter / self.total, "\r"))
     sys.stdout.flush()
 
