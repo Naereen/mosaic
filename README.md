@@ -4,7 +4,7 @@ This utility script can be used to generate [photo-mosaic](http://en.wikipedia.o
 
 ## Requirements
 To use it you must have [Python](https://www.python.org/) installed, along with the [Pillow](http://pillow.readthedocs.org/en/latest/) imaging library.
-It works on both Python 2 and Python 3. You can install PIP with this command, if you use [pip](https://pip.readthedocs.io/) or the other command if you use [conda](https://conda.io/docs/):
+It works on both Python 2 ([but you shoul stop using Python 2](https://pythonclock.org/)) and Python 3. You can install PIP with this command, if you use [pip](https://pip.readthedocs.io/) or the other command if you use [conda](https://conda.io/docs/):
 
 ```bash
 $ pip install Pillow  # if you use pip, you might need 'sudo'
@@ -23,9 +23,10 @@ Run the utility from the command line, as follows:
 $ python mosaic.py <input_image> <tiles directory> <output_image> [--gray]
 ```
 
-*   The `input_image` argument should contain the path to the image for which you want to build the mosaic
-*   The `tiles directory` argument should contain the path to the directory containing the tile images (the directory will be searched recursively, so it doesn't matter if some of the images are contained in sub-directories)
-*   The `output_image` argument should contain the path to the output image (default to 'mosaic.jpeg')
+- The `input_image` argument should contain the path to the image for which you want to build the mosaic
+- The `tiles directory` argument should contain the path to the directory containing the tile images (the directory will be searched recursively, so it doesn't matter if some of the images are contained in sub-directories)
+- The `output_image` argument should contain the path to the output image (default to 'mosaic.jpeg')
+- The `--gray` argument is *optional*, and if present it forces the script to convert input and tile images to grayscale and produces a grayscale image. Use this if the input image is grayscale or if the tile images are not colorful enough!
 
 ## Example
 For example:
