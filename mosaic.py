@@ -6,6 +6,7 @@ Usage: %s [--gray] <image> <tiles directory> <output>
 
 See https://github.com/Naereen/mosaic
 """
+from __future__ import division, print_function
 
 import sys
 import os
